@@ -1,0 +1,27 @@
+{
+  "name": "food-delivery-server",
+  "version": "1.0.0",
+  "description": "FoodDelivery Application - Backend Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaloyan/food-delivery-server.git"
+  },
+  "keywords": [],
+  "author": "Kaloyan Ivanov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kaloyan/food-delivery-server/issues"
+  },
+  "homepage": "https://github.com/kaloyan/food-delivery-server#readme",
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
