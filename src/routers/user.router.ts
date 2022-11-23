@@ -2,18 +2,30 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 
 import { sample_users } from "../data";
+import { UserModel } from "../models/user.model";
 
 const router = Router();
+let jwtKey: string = process.env.JWT_SECRET_KEY!;
 
-router.post("/login", (req, res) => {
+router.get("/seed", async (req, res) => {
+  const usersCount = await UserModel.countDocuments();
+
+  if (usersCount > 0) {
+    res.send("Seed is already done.");
+    return;
+  }
+
+  await UserModel.create(sample_users);
+  res.send("Seed is done.");
+});
+
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
-  const user = sample_users.find(
-    (user) => user.email == email && user.password == password
-  );
+  const user = await UserModel.findOne({ email, password }).lean();
 
   if (user) {
-    const response = generateToken(user);
+    const token = await generateToken(user);
+    const response = { ...user, token };
     res.send(response);
   } else {
     res.status(400).send("Invalid username or password.");
@@ -26,14 +38,13 @@ const generateToken = (user: any) => {
       email: user.email,
       isAdmin: user.isAdmin,
     },
-    "generate-randon-server-key",
+    jwtKey,
     {
       expiresIn: "14d",
     }
   );
 
-  user.token = token;
-  return user;
+  return token;
 };
 
 export default router;
