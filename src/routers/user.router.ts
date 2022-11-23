@@ -1,8 +1,9 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 import { sample_users } from "../data";
-import { UserModel } from "../models/user.model";
+import { User, UserModel } from "../models/user.model";
 
 const router = Router();
 let jwtKey: string = process.env.JWT_SECRET_KEY!;
@@ -30,6 +31,35 @@ router.post("/login", async (req, res) => {
   } else {
     res.status(400).send("Invalid username or password.");
   }
+});
+
+router.post("/reister", async (req, res) => {
+  const { name, email, password, address } = req.body;
+
+  // first check if user with same email already exist
+  const user = await UserModel.findOne({ email }).lean();
+
+  if (user) {
+    res.status(400).send("User already exist.");
+    return;
+  }
+
+  const encPass = await bcrypt.hash(password, 10);
+
+  const newUser: User = {
+    id: "",
+    name,
+    email: email.toLowerCase(),
+    password: encPass,
+    address,
+    isAdmin: false,
+  };
+
+  const dbUser = await UserModel.create(newUser);
+  const token = generateToken(dbUser);
+  const response = { ...dbUser, token };
+
+  res.send(response);
 });
 
 const generateToken = (user: any) => {
