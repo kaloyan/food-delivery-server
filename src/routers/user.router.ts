@@ -53,10 +53,10 @@ router.post("/register", async (req, res) => {
     password: encPass,
     address,
     isAdmin: false,
-  })
-  
+  });
+
   await newUser.save();
-  
+
   const validUser = await UserModel.findOne({ email }).lean();
 
   const token = generateToken(validUser);
@@ -68,6 +68,7 @@ router.post("/register", async (req, res) => {
 const generateToken = (user: any) => {
   const token = jwt.sign(
     {
+      id: user.id,
       email: user.email,
       isAdmin: user.isAdmin,
     },

@@ -38,7 +38,7 @@ export const OrderItemSchema = new Schema<OrderItem>({
   },
 });
 
-enum OrderStatusStates {
+export enum OrderStatusStates {
   NEW = "NEW",
   PAYED = "PAYED",
   SHIPPED = "SHIPPED",
