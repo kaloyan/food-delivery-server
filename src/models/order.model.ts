@@ -9,7 +9,7 @@ export interface LatLng {
 export interface OrderItem {
   food: Food;
   price: number;
-  quantity: number;
+  count: number;
 }
 
 export const LatLngSchema = new Schema<LatLng>({
@@ -32,7 +32,7 @@ export const OrderItemSchema = new Schema<OrderItem>({
     type: Number,
     required: true,
   },
-  quantity: {
+  count: {
     type: Number,
     required: true,
   },

@@ -82,7 +82,7 @@ export const sample_users: any[] = [
   {
     name: "John Smith",
     email: "john@domain.com",
-    password: "123",
+    password: "$2a$10$9roWD4lxcB2DtYp2aLFfR.FHuuYlb0CSWVxwClAa1H7zTmE2SoHYG", // 12345
     address: "Sofia",
     isAdmin: true,
   },
@@ -90,7 +90,7 @@ export const sample_users: any[] = [
   {
     name: "Chuck Noris",
     email: "chuck@domain.com",
-    password: "321",
+    password: "$2a$10$9roWD4lxcB2DtYp2aLFfR.FHuuYlb0CSWVxwClAa1H7zTmE2SoHYG", // 12345
     address: "Plovdiv",
     isAdmin: false,
   },
