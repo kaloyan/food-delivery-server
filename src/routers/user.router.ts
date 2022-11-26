@@ -33,7 +33,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/reister", async (req, res) => {
+router.post("/register", async (req, res) => {
   const { name, email, password, address } = req.body;
 
   // first check if user with same email already exist
@@ -46,18 +46,21 @@ router.post("/reister", async (req, res) => {
 
   const encPass = await bcrypt.hash(password, 10);
 
-  const newUser: User = {
+  const newUser = new UserModel({
     id: "",
     name,
     email: email.toLowerCase(),
     password: encPass,
     address,
     isAdmin: false,
-  };
+  })
+  
+  await newUser.save();
+  
+  const validUser = await UserModel.findOne({ email }).lean();
 
-  const dbUser = await UserModel.create(newUser);
-  const token = generateToken(dbUser);
-  const response = { ...dbUser, token };
+  const token = generateToken(validUser);
+  const response = { ...validUser, token };
 
   res.send(response);
 });
