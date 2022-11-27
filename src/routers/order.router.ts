@@ -42,4 +42,23 @@ router.get("/my-orders", async (req: any, res) => {
   }
 });
 
+router.post("/pay", async (req: any, res) => {
+  const { paymentId } = req.body;
+  const order = await OrderModel.findOne({
+    user: req.user.id,
+    status: OrderStatusStates.NEW,
+  }).exec();
+
+  if (!order) {
+    res.status(400).send("Order Not Founf!");
+    return;
+  }
+
+  order.paymentId = paymentId;
+  order.status = OrderStatusStates.PAYED;
+  await order.save();
+
+  res.send(order._id);
+});
+
 export default router;
