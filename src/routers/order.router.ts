@@ -61,4 +61,15 @@ router.post("/pay", async (req: any, res) => {
   res.send(order._id);
 });
 
+router.get("/track/:id", async (req, res) => {
+  const order = await OrderModel.findById(req.params.id);
+
+  if (!order) {
+    res.status(400).send("Order not found.");
+    return;
+  }
+
+  res.send(order);
+});
+
 export default router;
