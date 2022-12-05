@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { sample_food } from "../data";
+import { sample_food } from "../sample-food";
 import { FoodModel } from "../models/food.model";
 
 const router = Router();
@@ -17,13 +17,15 @@ router.get("/seed", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const foods = await FoodModel.find();
+  const foods = await FoodModel.find().limit(10).skip(0);
   res.send(foods);
 });
 
 router.get("/search/:query", async (req, res) => {
   const searchPat = new RegExp(req.params.query, "i");
-  const foods = await FoodModel.find({ name: { $regex: searchPat } });
+  const foods = await FoodModel.find({ name: { $regex: searchPat } })
+    .limit(10)
+    .skip(0);
 
   res.send(foods);
 });
@@ -59,7 +61,9 @@ router.get("/tags", async (req, res) => {
 });
 
 router.get("/tag/:tag", async (req, res) => {
-  const foods = await FoodModel.find({ tags: req.params.tag });
+  const foods = await FoodModel.find({ tags: req.params.tag })
+    .limit(10)
+    .skip(0);
   res.send(foods);
 });
 
