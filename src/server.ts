@@ -17,12 +17,13 @@ const origin = process.env.ORIGIN || "http://localhost:4200";
 
 app.use(express.json());
 
-app.use(
-  cors({
-    credentials: true,
-    origin: [origin],
-  })
-);
+var corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
 
 app.use("/api/foods", foodRouter);
 app.use("/api/users", userRouter);
