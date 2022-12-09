@@ -10,6 +10,8 @@ export interface Food {
   imageUrl: string;
   origins: string[];
   cookTime: string;
+  ingredients: string[];
+  description: string;
 }
 
 export const FoodSchema = new Schema<Food>(
@@ -47,6 +49,12 @@ export const FoodSchema = new Schema<Food>(
     cookTime: {
       type: String,
       required: true,
+    },
+    ingredients: {
+      type: [String],
+    },
+    description: {
+      type: String,
     },
   },
   {

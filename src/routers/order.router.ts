@@ -42,6 +42,11 @@ router.get("/my-orders", async (req: any, res) => {
   }
 });
 
+router.get("/order-history", async (req: any, res) => {
+  const orders = await OrderModel.find({user: req.user.id});
+  res.send(orders);
+});
+
 router.post("/pay", async (req: any, res) => {
   const { paymentId } = req.body;
   const order = await OrderModel.findOne({

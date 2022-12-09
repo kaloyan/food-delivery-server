@@ -80,6 +80,17 @@ router.get("/search/:query", async (req, res) => {
   res.send(output);
 });
 
+router.get("/popular", async (req, res) => {
+  let foods = await FoodModel.aggregate([{ $sample: { size: 3 } }]);
+  foods = foods.map((food) => {
+    return {
+      ...food,
+      id: food._id,
+    };
+  });
+  res.send(foods);
+});
+
 router.get("/tags", async (req, res) => {
   const tags = await FoodModel.aggregate([
     {
