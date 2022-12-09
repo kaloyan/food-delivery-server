@@ -13,13 +13,14 @@ import { dbConnect } from "./config/database";
 dbConnect();
 
 const app = express();
+const origin = process.env.ORIGIN || "http://localhost:4200";
 
 app.use(express.json());
 
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:4200"],
+    origin: [origin],
   })
 );
 
@@ -35,6 +36,6 @@ app.get("*", (req, res) => {
 
 app.listen(process.env.SERVER_PORT || 3000, () => {
   console.log(
-    `Server listening on http://localhost:${process.env.SERVER_PORT}`
+    `Server listening on http://0.0.0.0:${process.env.SERVER_PORT}`
   );
 });
