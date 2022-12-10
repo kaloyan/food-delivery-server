@@ -4,6 +4,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import path from "path";
+import cookieParser from "cookie-parser";
 
 import foodRouter from "./routers/food.router";
 import userRouter from "./routers/user.router";
@@ -18,12 +19,14 @@ const origin = process.env.ORIGIN || "http://localhost:4200";
 app.use(express.json());
 
 var corsOptions = {
-  origin: '*',
+  origin: "*",
   credentials: true,
-  optionsSuccessStatus: 200
-}
-
+  optionsSuccessStatus: 200,
+};
 app.use(cors(corsOptions));
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use("/api/foods", foodRouter);
 app.use("/api/users", userRouter);
@@ -36,7 +39,5 @@ app.get("*", (req, res) => {
 });
 
 app.listen(process.env.SERVER_PORT || 3000, () => {
-  console.log(
-    `Server listening on http://0.0.0.0:${process.env.SERVER_PORT}`
-  );
+  console.log(`Server listening on http://0.0.0.0:${process.env.SERVER_PORT}`);
 });

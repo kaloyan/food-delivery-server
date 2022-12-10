@@ -37,10 +37,15 @@ router.post("/login", async (req, res) => {
       token,
     };
 
-    res.send(response);
+    res.cookie("jwt_token", token, { httpOnly: true }).json(response);
   } else {
     res.status(400).send("Invalid username or password.");
   }
+});
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("jwt_token");
+  res.send("Logged out.");
 });
 
 router.post("/register", async (req, res) => {
@@ -72,7 +77,7 @@ router.post("/register", async (req, res) => {
   const token = generateToken(validUser);
   const response = { ...validUser, token };
 
-  res.send(response);
+  res.cookie("jwt_token", token, { httpOnly: true }).send(response);
 });
 
 const generateToken = (user: any) => {
