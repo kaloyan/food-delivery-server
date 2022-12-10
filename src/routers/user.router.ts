@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 
 import { sample_users } from "../data";
 import { UserModel } from "../models/user.model";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const router = Router();
 let jwtKey: string = process.env.JWT_SECRET_KEY!;
@@ -34,6 +35,7 @@ router.post("/login", async (req, res) => {
       email: user.email,
       address: user.address,
       isAdmin: user.isAdmin,
+      latlng: user.latlng,
       token,
     };
 
@@ -78,6 +80,21 @@ router.post("/register", async (req, res) => {
   const response = { ...validUser, token };
 
   res.cookie("jwt_token", token, { httpOnly: true }).send(response);
+});
+
+router.post("/location", authMiddleware, async (req: any, res) => {
+  if (!req.user) return;
+
+  const location = req.body;
+
+  if (!location) return;
+
+  await UserModel.findOneAndUpdate(
+    { email: req.user.email },
+    { latlng: location }
+  );
+
+  res.json(location);
 });
 
 const generateToken = (user: any) => {

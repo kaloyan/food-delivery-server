@@ -7,6 +7,10 @@ export interface User {
   password: string;
   address: string;
   isAdmin: boolean;
+  latlng: {
+    lat: string;
+    lng: string;
+  };
 }
 
 export const UserSchema = new Schema<User>(
@@ -32,6 +36,10 @@ export const UserSchema = new Schema<User>(
       type: Boolean,
       required: true,
       default: false,
+    },
+    latlng: {
+      type: Object,
+      default: {},
     },
   },
   {
