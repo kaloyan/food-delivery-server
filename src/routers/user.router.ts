@@ -97,6 +97,21 @@ router.post("/location", authMiddleware, async (req: any, res) => {
   res.json(location);
 });
 
+router.post("/profile", authMiddleware, async (req: any, res) => {
+  const profile = req.body;
+
+  if (!profile) {
+    res.status(400).send("Invalid data.");
+    return;
+  }
+
+  const user = await UserModel.findByIdAndUpdate(req.user.id, {
+    $set: { name: profile.name, address: profile.address },
+  });
+
+  res.json(user);
+});
+
 const generateToken = (user: any) => {
   const token = jwt.sign(
     {
