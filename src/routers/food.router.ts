@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { sample_food } from "../sample-food";
 import { FoodModel } from "../models/food.model";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const router = Router();
 const PAGE_SIZE = 8;
@@ -155,6 +156,29 @@ router.get("/tag/:tag", async (req, res) => {
 
 router.get("/:foodId", async (req, res) => {
   const food = await FoodModel.findById(req.params.foodId);
+  res.send(food);
+});
+
+router.post("/update", authMiddleware, async (req: any, res) => {
+  if (!req.user.isAdmin) {
+    res.status(403).send("Unauthorized.");
+    return;
+  }
+
+  const data = req.body;
+
+  const food = await FoodModel.findByIdAndUpdate(data.id, {
+    $set: {
+      name: data.name,
+      origins: data.origins,
+      tags: data.tags,
+      cookTime: data.cookTime,
+      price: data.price,
+      ingredients: data.ingredients,
+      description: data.description,
+    },
+  });
+
   res.send(food);
 });
 
